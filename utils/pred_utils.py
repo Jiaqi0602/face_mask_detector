@@ -7,6 +7,8 @@ from layers.functions.prior_box import PriorBox
 from utils.box_utils import decode
 from data import cfg
 
+# functions for getting predicted bounding boxes and confidence scores for each classes detected
+
 device = 'cpu'
 if torch.cuda.is_available():
     device = 'cuda'
@@ -59,7 +61,7 @@ def get_pred(boxes, conf, num_classes, confidence_threshold, nms_threshold):
         
     return pred 
 
-# create .txt files for model performance evaluation 
+# create ground truth .txt files for model performance evaluation 
 def create_gt_file(model, gt_folder, dataset): 
     # gt file - file to store ground-truth .txt files 
     # dataset - val dataset for evaluation 
@@ -71,7 +73,8 @@ def create_gt_file(model, gt_folder, dataset):
         gt_f.write('{:.0f} {:.0f} {:.0f} {:.0f} {:.0f}\n'.format(label_[4], label_[0], label_[1], label_[2], label_[3]))
         gt_f.close() 
     print('Done writing ground-truths data into .txt files...')
-    
+
+# create result .txt files for evaluation 
 def create_result_file(model, result_folder, dataset, confidence_threshold, nms_threshold): 
     for i, data in enumerate(dataset):
         img_raw, bbox, img_path = data

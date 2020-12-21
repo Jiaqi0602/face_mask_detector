@@ -3,8 +3,22 @@ import numpy as np
 import random
 from utils.box_utils import matrix_iof
 
+"""
+Include all the data augumentation functions steps stated in the report assignment step 2 
+
+Data augmentation is to increase the diversity of data to improve the model's performance especially when
+making predictions of small objects 
+
+
+"""
+
 
 def _crop(image, boxes, labels, img_dim):
+    
+    # crop the expanded images produced
+    # the cropped patch has some overlap with at least one ground-truth box 
+    # and the centroid of at least one ground-truth box 
+    
     height, width, _ = image.shape
     pad_image_flag = True
 
@@ -125,6 +139,8 @@ def _distort(image):
 
 
 def _expand(image, boxes, fill, p):
+    # expand image -- zoom out to improve model in detecting small objects 
+    # fill the surrounding space with mean of the data 
     if random.randrange(2):
         return image, boxes
 
@@ -151,6 +167,7 @@ def _expand(image, boxes, fill, p):
 
 
 def _mirror(image, boxes):
+    # flip image horizontally 
     _, width, _ = image.shape
     if random.randrange(2):
         image = image[:, ::-1]
@@ -160,6 +177,7 @@ def _mirror(image, boxes):
 
 
 def _pad_to_square(image, rgb_mean, pad_image_flag):
+    # if the dimension of image is not square, use mean to pad the image to square
     if not pad_image_flag:
         return image
     height, width, _ = image.shape
@@ -171,6 +189,7 @@ def _pad_to_square(image, rgb_mean, pad_image_flag):
 
 
 def _resize_subtract_mean(image, insize, rgb_mean):
+    # resize the image to standard size of (1024, 1024)
     interp_methods = [cv2.INTER_LINEAR, cv2.INTER_CUBIC, cv2.INTER_AREA, cv2.INTER_NEAREST, cv2.INTER_LANCZOS4]
     interp_method = interp_methods[random.randrange(5)]
     image = cv2.resize(image, (insize, insize), interpolation=interp_method)
@@ -180,7 +199,7 @@ def _resize_subtract_mean(image, insize, rgb_mean):
 
 
 class preproc(object):
-
+    # data preprocessing step 
     def __init__(self, img_dim, rgb_means):
         self.img_dim = img_dim
         self.rgb_means = rgb_means
@@ -196,6 +215,8 @@ class preproc(object):
         #image_t, boxes_t, labels_t = _crop(image_t, boxes, labels, self.img_dim, self.rgb_means)
         image_t, boxes_t, labels_t, pad_image_flag = _crop(image, boxes, labels, self.img_dim)
         image_t = _distort(image_t)
+        
+        # use pad_to_square instead of expansion
         image_t = _pad_to_square(image_t,self.rgb_means, pad_image_flag)
         image_t, boxes_t = _mirror(image_t, boxes_t)
         height, width, _ = image_t.shape
@@ -204,6 +225,8 @@ class preproc(object):
         boxes_t[:, 1::2] /= height
 
         labels_t = np.expand_dims(labels_t, 1)
+        
+        # stack ground-truth boxes and labels 
         targets_t = np.hstack((boxes_t, labels_t))
 
         return image_t, targets_t

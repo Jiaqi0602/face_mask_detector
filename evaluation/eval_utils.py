@@ -10,6 +10,15 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import cv2 
 
+"""
+To evaluate the mAP score (mean averare precision) 
+This evaluation is important to 
+1. determine whether an object exists in the image (classificaiton)
+2. determine the location of the objefct (localisation)
+
+False negative and false positive rates are computed to calculate the precision and recall 
+"""
+
 
 def file_lines_to_list(path):
     # open txt file lines to a list

@@ -1,8 +1,7 @@
 __pycache__/
 *.py[cod]
 *.ipynb_checkpoints
-archieve/ 
 *.xml
-*.png
-*.jpg
 *.txt
+FaceMask/
+archieve/ 

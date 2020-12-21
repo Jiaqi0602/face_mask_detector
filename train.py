@@ -42,6 +42,7 @@ save_folder = args.save_folder
 img_dim = 1024 # only 1024 is supported
 rgb_mean = (104, 117, 123) # bgr order
 
+# use gpu if exists 
 device = 'cpu'
 if torch.cuda.is_available():
     device = 'cuda'
@@ -50,18 +51,23 @@ if torch.cuda.is_available():
 if os.path.exists(save_folder)==False: 
     os.makedirs(save_folder)
     
-# model 
+# define model 
 net = FaceBoxes('train', img_dim, num_classes, pretrained=pretrained)
 net = net.to(device)
 
+# define optimizer and loss function (criterion)
 optimizer = optim.SGD(net.parameters(), lr=initial_lr, momentum=momentum, weight_decay=weight_decay)
 criterion = MultiBoxLoss(num_classes, 0.35, True, 0, True, 7, 0.35, False)
 
+# define priorbox 
+# priorbox are pre-computed boxes defined at specific positions on specific feature maps, with specific aspect ratios and scales.
+# they are used to match the ground-truth bouding boxes 
 priorbox = PriorBox(cfg, image_size=(img_dim, img_dim))
 with torch.no_grad():
     priors = priorbox.forward()
     priors = priors.to(device)
-    
+
+# training function 
 def train():
     net.train()
     epoch = 0

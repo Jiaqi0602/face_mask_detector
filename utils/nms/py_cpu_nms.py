@@ -7,8 +7,10 @@
 
 import numpy as np
 
+# non-maximum suppression 
+# remove redundant predictions by suppressing all but the one with the maximum score 
+
 def py_cpu_nms(dets, thresh):
-    """Pure Python NMS baseline."""
     x1 = dets[:, 0]
     y1 = dets[:, 1]
     x2 = dets[:, 2]

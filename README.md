@@ -22,7 +22,7 @@ To do transfer learning, pre-trained model can be downloaded [here](https://driv
 
 ## Datasets 
 
-Annotated datasets can be downloaded from [AIZOOTech](https://github.com/AIZOOTech/FaceMaskDetection), they provided downloadable data in both GoogleDrive and BaiduDisk. 
+Annotated datasets can be downloaded from [AIZOOTech](https://github.com/AIZOOTech/FaceMaskDetection), data are downloadable in both GoogleDrive and BaiduDisk. 
 
 ## Training
 Navigate to face_mask_detector/ then run: 

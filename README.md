@@ -36,3 +36,6 @@ To evaluate the trained model, run:
 ```bash 
 python evaluate_detector.py 
 ```
+## Performance of model
+The model is evaluated using mAP evaluation metrics 
+![alt text](https://raw.githubusercontent.com/Jiaqi0602/face_mask_detector/main/evaluation/output/mAP.png) 
